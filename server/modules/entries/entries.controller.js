@@ -1,18 +1,18 @@
 var auto = require('run-auto')
 var mongoose = require('mongoose')
-var entriess = mongoose.model('entries')
+var entriesSchema = mongoose.model('entries')
 var _ = require('lodash')
 
 exports.getEntries = function (req, res, next) {
   auto({
-    entriess: function (cb) {
-      entriess
+    entriesSchema: function (cb) {
+      entriesSchema
         .find()
         .exec(cb)
     }
   }, function (err, results) {
     if (err) return next(err)
-    return res.status(200).send(results.entriess)
+    return res.status(200).send(results)
   })
 }
 exports.deleteEntries = function (req, res, next) {
@@ -32,7 +32,7 @@ exports.postEntries = function (req, res, next) {
     })
   }
   req.body.user = req.user._id
-  entriess.create(req.body, function (err, data) {
+  entriesSchema.create(req.body, function (err, data) {
     if (err) return next(err)
     return res.status(201).send(data)
   })
@@ -64,7 +64,7 @@ exports.paramEntries = function (req, res, next, id) {
   }
   auto({
     entries: function (cb) {
-      entriess
+      entriesSchema
         .findOne({_id: id})
         .exec(cb)
     }

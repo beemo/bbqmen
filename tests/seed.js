@@ -3,6 +3,7 @@ var mongoose = require('mongoose')
 var auto = require('run-auto')
 var User = mongoose.model('users', require('../server/modules/users/users.model.js'))
 var Blog = mongoose.model('blog', require('../server/modules/blog/blog.model.js'))
+var Entry = mongoose.model('entries', require('../server/modules/entries/entries.model.js'))
 
 function seed (cb) {
   auto({
@@ -15,6 +16,11 @@ function seed (cb) {
         },
         Blog: function (callback) {
           Blog.find({}).remove().exec(function () {
+            callback(null, true)
+          })
+        },
+        Entries: function (callback) {
+          Entry.find({}).remove().exec(function () {
             callback(null, true)
           })
         }
@@ -124,6 +130,96 @@ function seed (cb) {
 
       }]).then(function (blogs) {
         callback(null, blogs)
+      })
+    }],
+    entries: ['users', function (results, callback) {
+      Entry.create([{
+            title: "brisket",
+            user: results.users[3]._id,
+            results: {
+                flavor: 9,
+                texture: 9,
+                appearance: 8,
+                overall: 10
+            },
+            cook: {
+                smokerModel: "WSM",
+                temp: 235,
+                woodType: "MACH",
+                electricHeatingElement: true,
+                pellets: true,
+                charcoal: false,
+                cookTime: {
+                  hours: 8,
+                  mins: 30
+                }
+            },
+            ingredients: {
+                meat: "beef",
+                marinade: "apple juice",
+                injection: "brine",
+                slather: "mustard",
+                rub: "killer"
+            }
+        }, {
+              title: "butt",
+              user: "59dfe00bc5eee249928cc599",
+              results: {
+                  flavor: 10,
+                  texture: 7,
+                  appearance: 2,
+                  overall: 8
+              },
+              cook: {
+                  smokerModel: "Masterbuilt",
+                  temp: 215,
+                  woodType: "Oak Chunks",
+                  electricHeatingElement: false,
+                  pellets: false,
+                  charcoal: true,
+                  cookTime: {
+                    hours: 12,
+                    mins: 0
+                  }
+              },
+              ingredients: {
+                  meat: "shoulder",
+                  marinade: "apple juice",
+                  injection: "brine",
+                  slather: "mustard",
+                  rub: "texmex"
+              }
+          },
+          {
+                title: "jerky",
+                user: "59dfe00bc5eee249928cc599",
+                results: {
+                    flavor: 10,
+                    texture: 10,
+                    appearance: 8,
+                    overall: 10
+                },
+                cook: {
+                    smokerModel: "WSM",
+                    temp: 105,
+                    woodType: "MACH",
+                    electricHeatingElement: true,
+                    pellets: true,
+                    charcoal: false,
+                    cookTime: {
+                      hours: 3,
+                      mins: 30
+                    }
+                },
+                ingredients: {
+                    meat: "beef",
+                    marinade: "soy",
+                    injection: "none",
+                    slather: "none",
+                    rub: "pepper"
+                }
+            }]).then(function (entries) {
+        callback(null, entries)
       })
     }]
   }, function (err, results) {

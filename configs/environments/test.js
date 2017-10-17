@@ -13,14 +13,14 @@ module.exports = {
     zoneId: process.env.MAXCDN_ZONE_ID || false
   },
   mongoexpress: {
-    port: process.env.MONGOEXPRESSPORT || 8081
+    port: process.env.MONGOEXPRESSPORT || 8088
   },
   socketio: {
-    port: process.env.SOCKETIOPORT || 8282
+    port: process.env.SOCKETIOPORT || 8288
   },
   http: {
     active: true,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3008
   },
   https: {
     active: false,
