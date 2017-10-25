@@ -14,7 +14,8 @@ var entriesSchema = mongoose.Schema({
     marinade: String,
     injection: String,
     slather: String,
-    rub: String
+    rub: String,
+    sauce: String
   },
   cook: {
     smokerModel: String,

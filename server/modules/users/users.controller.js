@@ -183,6 +183,8 @@ exports.logout = function (req, res) {
 
 exports.postSignup = function (req, res, next) {
   debug('start postSignup')
+  console.log('req.body:', req.body)
+  console.log('req.headers:', req.headers)
 
   req.assert('profile', 'Name must not be empty').notEmpty()
   req.assert('email', 'Email is not valid').isEmail()
