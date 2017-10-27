@@ -6,8 +6,12 @@ var _ = require('lodash')
 exports.getEntries = function (req, res, next) {
   auto({
     entriesSchema: function (cb) {
+      var obj = {};
+      if (req.query.user) {
+        obj.user = req.query.user
+      }
       entriesSchema
-        .find()
+        .find(obj)
         .exec(cb)
     }
   }, function (err, results) {
@@ -21,7 +25,8 @@ exports.deleteEntries = function (req, res, next) {
   })
 }
 exports.postEntries = function (req, res, next) {
-  req.assert('user', 'The user cannot be blank').notEmpty().isMongoId()
+  req.assert('user', 'The user cannot be blank').notEmpty()
+  req.assert('user', 'The user must be a valid ID').isMongoId()
   console.log('req.body:', req.body)
   console.log('req.headers:', req.headers)
 
@@ -33,6 +38,7 @@ exports.postEntries = function (req, res, next) {
       redirect: '/'
     })
   }
+  // console.log(req.body)
   // req.body.user = req.user._id
   entriesSchema.create(req.body, function (err, data) {
     if (err) return next(err)

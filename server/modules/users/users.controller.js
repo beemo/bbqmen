@@ -171,6 +171,7 @@ exports.postLogin = function (req, res, next) {
         redirect: redirect
       })
     })
+    console.log(user)
   })(req, res, next)
 }
 
