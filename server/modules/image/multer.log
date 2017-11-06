@@ -1,0 +1,147 @@
+app.js
+
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var path = require('path');
+app.use(bodyParser.json());
+
+//To get the access for the functions defined in index.js class
+var routes = require('./routes/imagefile');
+
+// connect to mongo,
+//i have created mongo collection in mlab.com.. the below is my database access url..
+//So make sure you give your connection details..
+mongoose.connect('mongodb://nodejsapi:nodejsapi@ds041516.mlab.com:41516/mynodejsapp');
+
+app.use('/', routes);
+
+//URL : http://localhost:3000/images/
+// To get all the images/files stored in MongoDB
+app.get('/images', function(req, res) {
+//calling the function from index.js class using routes object..
+routes.getImages(function(err, genres) {
+if (err) {
+throw err;
+}
+res.json(genres);
+
+});
+});
+
+// URL : http://localhost:3000/images/(give you collectionID)
+// To get the single image/File using id from the MongoDB
+app.get('/images/:id', function(req, res) {
+
+//calling the function from index.js class using routes object..
+routes.getImageById(req.params.id, function(err, genres) {
+if (err) {
+throw err;
+}
+//res.download(genres.path);
+res.send(genres.path)
+});
+});
+
+app.listen(3000);
+
+console.log('Running on port 3000');
+
+index.ejs
+
+<html>
+<head>
+ <title>test</title>
+</head>
+<body>
+<form action "/" method="POST" enctype="multipart/form-data">
+ <input type="file" name="myimage" ></input>
+ <input type="submit" name="submit" value="submit"></input>
+</form>
+</body>
+</html>
+
+imagefile.js
+
+var express = require('express');
+var router = express.Router();
+var multer = require('multer');
+var mongoose = require('mongoose');
+
+//path and originalname are the fields stored in mongoDB
+var imageSchema = mongoose.Schema({
+ path: {
+ type: String,
+ required: true,
+ trim: true
+ },
+ originalname: {
+ type: String,
+ required: true
+ }
+
+});
+
+
+var Image = module.exports = mongoose.model('files', imageSchema);
+
+router.getImages = function(callback, limit) {
+
+ Image.find(callback).limit(limit);
+}
+
+
+router.getImageById = function(id, callback) {
+
+ Image.findById(id, callback);
+
+}
+
+router.addImage = function(image, callback) {
+ Image.create(image, callback);
+}
+
+
+// To get more info about 'multer'.. you can go through https://www.npmjs.com/package/multer..
+var storage = multer.diskStorage({
+ destination: function(req, file, cb) {
+ cb(null, 'uploads/')
+ },
+ filename: function(req, file, cb) {
+ cb(null, file.originalname);
+ }
+});
+
+var upload = multer({
+ storage: storage
+});
+
+router.get('/', function(req, res, next) {
+ res.render('index.ejs');
+});
+
+router.post('/', upload.any(), function(req, res, next) {
+
+ res.send(req.files);
+
+/*req.files has the information regarding the file you are uploading...
+from the total information, i am just using the path and the imageName to store in the mongo collection(table)
+*/
+ var path = req.files[0].path;
+ var imageName = req.files[0].originalname;
+
+ var imagepath = {};
+ imagepath['path'] = path;
+ imagepath['originalname'] = imageName;
+
+ //imagepath contains two objects, path and the imageName
+
+ //we are passing two objects in the addImage method.. which is defined above..
+ router.addImage(imagepath, function(err) {
+
+ });
+
+});
+
+module.exports = router;

@@ -27,8 +27,8 @@ exports.deleteEntries = function (req, res, next) {
 exports.postEntries = function (req, res, next) {
   req.assert('user', 'The user cannot be blank').notEmpty()
   req.assert('user', 'The user must be a valid ID').isMongoId()
-  console.log('req.body:', req.body)
-  console.log('req.headers:', req.headers)
+  // console.log('req.body:', req.body)
+  // console.log('req.headers:', req.headers)
 
   var errors = req.validationErrors()
   if (errors) {
@@ -38,8 +38,6 @@ exports.postEntries = function (req, res, next) {
       redirect: '/'
     })
   }
-  // console.log(req.body)
-  // req.body.user = req.user._id
   entriesSchema.create(req.body, function (err, data) {
     if (err) return next(err)
     return res.status(201).send(data)

@@ -36,7 +36,7 @@ function security (self) {
   // CORS PREFLIGHT OPTIONS
   // app.options('*', cors()) // include before other routes
   // Validate MAX_CONTENT_LENGTH_ACCEPTED
-  var MAX_CONTENT_LENGTH_ACCEPTED = 9999
+  var MAX_CONTENT_LENGTH_ACCEPTED = 9999999
   self.app.use(contentLength.validateMax({
     max: MAX_CONTENT_LENGTH_ACCEPTED,
     status: 400,
