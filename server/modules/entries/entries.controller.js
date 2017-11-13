@@ -73,6 +73,7 @@ exports.paramEntries = function (req, res, next, id) {
     entries: function (cb) {
       entriesSchema
         .findOne({_id: id})
+        .populate('image')
         .exec(cb)
     }
   }, function (err, results) {

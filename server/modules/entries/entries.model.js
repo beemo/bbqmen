@@ -35,6 +35,10 @@ var entriesSchema = mongoose.Schema({
     appearance: Number,
     overall: Number
   },
+  photo: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'image',
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'user'

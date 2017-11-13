@@ -8,9 +8,9 @@ module.exports = function (app, auth, mail, settings, models) {
   // GET IMAGE BY ID
   app.get('/api/image/:imageId', image.getImageById)
   // POST
-  app.post('/api/image', upload.single('file'), image.upload )
+  app.post('/api/image', upload.single('file'), image.upload, image.postImage )
   // PUT
-  app.put('/api/image/:imageId', image.putImage)
+  app.put('/api/image/:imageId', upload.single('file'), image.upload, image.putImage)
   // DELETE
   app.delete('/api/image/:imageId', image.deleteImage)
   // PARAM
