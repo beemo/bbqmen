@@ -41,7 +41,7 @@ var entriesSchema = mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'user'
+    ref: 'users'
   }
 })
 

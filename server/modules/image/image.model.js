@@ -5,16 +5,6 @@ var imageSchema = mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  user_id: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  entryId: {
-    type: String,
-    trim: true,
-    required: true
-  },
   vuePath: {
     type: String,
     trim: true,
@@ -22,8 +12,14 @@ var imageSchema = mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'user'
-  }
+    ref: 'user',
+    required: true
+  },
+  image: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'image'
+  },
+
 })
 
 module.exports = imageSchema

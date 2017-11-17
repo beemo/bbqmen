@@ -12,14 +12,13 @@ var sh = require('shelljs')
 exports.upload = function(req, res, next) {
   console.log(req.body)
 
-  req.assert('entryId', 'Your Entries ID cannot be blank').notEmpty()
-  req.assert('entryId', 'Your Entries ID has to be a real id').isMongoId()
+  req.assert('user', 'Your user ID cannot be blank').notEmpty()
+  req.assert('user', 'Your user ID has to be a real id').isMongoId()
 
   if (!req.file) {
     console.log('No image found with ' + req.body._id)
     return res.status(400).send()
   }
-
 
   if (req.method == "PUT" && req.image) {
     var oldSize = sh.exec('du /Users/bmo/dev/fe' + req.image.vuePath + ' | cut -f 1')
@@ -34,21 +33,8 @@ exports.upload = function(req, res, next) {
   var date = moment().format('M-D-Y')
   var tempDir = path.resolve(__dirname, './uploads/')
 
-  // fs.readFile(req.file.path, function(err, data) {
-  // if (err) {
-  //   return next(err)
-  // }
-  //
-  // fs.writeFile(createFile, data, (err) => {
-  //   if (err) {
-  //   console.error(`writeFile: FAIL - no access! to ${createFile}`, err)
-  //   return err
-  //   }
-  //   console.log(`writeFile: SUCCESS - can write ${createFile}`)
-  // });
-
   var tempPath = `${tempDir}/${req.file.filename}`
-  var vueDir = `/Users/bmo/dev/fe/static/${req.body.user_id}`
+  var vueDir = `/Users/bmo/dev/fe/static/${req.body.user}`
   var vueFile = `${date}_${req.file.originalname}`
   var vuePath = `${vueDir}/${vueFile}`
 
@@ -59,7 +45,7 @@ exports.upload = function(req, res, next) {
   if (sh.mv(tempPath, vuePath).code !== 0) {
     console.log('exports.upload mv failed')
   }
-  req.body.vuePath = `/static/${req.body.user_id}/${vueFile}`
+  req.body.vuePath = `/static/${req.body.user}/${vueFile}`
   next()
 }
 
@@ -81,7 +67,7 @@ exports.deleteImage = function(req, res, next) {
   })
 }
 exports.postImage = function(req, res, next) {
-  req.assert('entryId', 'The entryId cannot be blank').notEmpty()
+  req.assert('user', 'The user ID cannot be blank').notEmpty()
 
   var errors = req.validationErrors()
   if (errors) {
@@ -116,9 +102,8 @@ exports.getImageById = function(req, res, next) {
 }
 
 exports.paramImage = function(req, res, next, id) {
-
-  req.assert('imageId', 'Your Image ID cannot be blank').notEmpty()
-  req.assert('imageId', 'Your Image ID has to be a real id').isMongoId()
+  req.assert('imageId', 'Your image _id cannot be blank').notEmpty()
+  req.assert('imageId', 'Your image _id has to be a real id').isMongoId()
 
   var errors = req.validationErrors()
   if (errors) {
@@ -133,7 +118,6 @@ exports.paramImage = function(req, res, next, id) {
     image: function(cb) {
       images
         .findOne({
-          // entryId: id
           _id: id
         })
         .exec(cb)

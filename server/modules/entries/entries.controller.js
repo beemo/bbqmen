@@ -12,6 +12,7 @@ exports.getEntries = function (req, res, next) {
       }
       entriesSchema
         .find(obj)
+        .populate('photo user')
         .exec(cb)
     }
   }, function (err, results) {
@@ -27,8 +28,8 @@ exports.deleteEntries = function (req, res, next) {
 exports.postEntries = function (req, res, next) {
   req.assert('user', 'The user cannot be blank').notEmpty()
   req.assert('user', 'The user must be a valid ID').isMongoId()
-  // console.log('req.body:', req.body)
-  // console.log('req.headers:', req.headers)
+  console.log('req.body:', req.body)
+  console.log('req.headers:', req.headers)
 
   var errors = req.validationErrors()
   if (errors) {
@@ -57,8 +58,8 @@ exports.getEntriesById = function (req, res, next) {
   res.send(req.entries)
 }
 exports.paramEntries = function (req, res, next, id) {
-  req.assert('entriesId', 'Your Entries ID cannot be blank').notEmpty()
-  req.assert('entriesId', 'Your Entries ID has to be a real id').isMongoId()
+  req.assert('entriesId', 'Your entries ID cannot be blank').notEmpty()
+  req.assert('entriesId', 'Your entries ID has to be a real id').isMongoId()
 
   var errors = req.validationErrors()
   if (errors) {
@@ -73,7 +74,7 @@ exports.paramEntries = function (req, res, next, id) {
     entries: function (cb) {
       entriesSchema
         .findOne({_id: id})
-        .populate('image')
+        .populate('photo user')
         .exec(cb)
     }
   }, function (err, results) {
