@@ -86,7 +86,6 @@ exports.postAuthenticate = function (req, res, next) {
 
 exports.getAuthenticate = function (req, res) {
   debug('start getAuthenticate')
-
   var redirect = req.body.redirect || false
   if (req.user) {
     var token = jwt.sign({
