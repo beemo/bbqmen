@@ -27,7 +27,7 @@ exports.deleteEntries = function (req, res, next) {
 }
 exports.postEntries = function (req, res, next) {
   req.assert('user', 'The user cannot be blank').notEmpty()
-  req.assert('user', 'The user must be a valid ID').isMongoId()
+  // req.assert('user', 'The user must be a valid ID').isMongoId()
   console.log('req.body:', req.body)
   console.log('req.headers:', req.headers)
 

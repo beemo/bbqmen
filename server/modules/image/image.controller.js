@@ -13,7 +13,7 @@ exports.upload = function(req, res, next) {
   console.log(req.body)
 
   req.assert('user', 'Your user ID cannot be blank').notEmpty()
-  req.assert('user', 'Your user ID has to be a real id').isMongoId()
+  // req.assert('user', 'Your user ID has to be a real id').isMongoId()
 
   if (!req.file) {
     console.log('No image found with ' + req.body._id)
