@@ -39,6 +39,7 @@ exports.postEntries = function (req, res, next) {
       redirect: '/'
     })
   }
+  if (req.body.photo == '') {delete req.body.photo}
   entriesSchema.create(req.body, function (err, data) {
     console.log('err', err)
     if (err) return next(err)
