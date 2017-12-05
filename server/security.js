@@ -34,7 +34,7 @@ function security (self) {
   self.app.use(cors())
 
   // CORS PREFLIGHT OPTIONS
-  // app.options('*', cors()) // include before other routes
+  self.app.options('*', cors()) // include before other routes
   // Validate MAX_CONTENT_LENGTH_ACCEPTED
   var MAX_CONTENT_LENGTH_ACCEPTED = 9999999
   self.app.use(contentLength.validateMax({
